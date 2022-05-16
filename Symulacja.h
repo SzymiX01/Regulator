@@ -1,6 +1,7 @@
 #pragma once
 #include "Grzejnik.h"
 #include "Pomieszczenie.h"
+#include <iostream>
 
 class Symulacja
 {
@@ -14,5 +15,6 @@ public:
 	void iteracja(float czas);
 	void przebieg(int iteracja, float dt);
 	void zapis(char* dane);
+	void wyswietl();
 };
 

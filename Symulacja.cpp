@@ -19,3 +19,7 @@ void Symulacja::przebieg(int iteracje, float dt) {
 void Symulacja::zapis(char* dane) {
 
 }
+
+void Symulacja::wyswietl() {
+	std::cout<< "Temperatura pomieszczenia: " << pomieszczenie.getTemperatura()<<std::endl;
+}

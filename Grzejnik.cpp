@@ -1,6 +1,6 @@
 #include "Grzejnik.h"
 
-Grzejnik::Grzejnik(int moc_)
+Grzejnik::Grzejnik(float moc_)
 	: moc(moc_),
 	procent_mocy(1)
 {}

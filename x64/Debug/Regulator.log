@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Users\Gosia\Desktop\konrad\Regulator\main.cpp(7,23): warning C4305: 'argument': truncation from 'double' to 'float'
+  Regulator.vcxproj -> C:\Users\Gosia\Desktop\konrad\Regulator\x64\Debug\Regulator.exe

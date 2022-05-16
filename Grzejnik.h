@@ -3,10 +3,10 @@
 class Grzejnik
 {
 private:
-	int moc;
+	float moc;
 	float procent_mocy;
 public:
-	Grzejnik(int moc_);
+	Grzejnik(float moc_);
 	void steruj(float procent);
 	float oddajCieplo();
 };
