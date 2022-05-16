@@ -7,7 +7,7 @@ private:
 	float procent_mocy;
 public:
 	Grzejnik(float moc_);
-	void steruj(float procent);
+	void ustaw(float procent);
 	float oddajCieplo();
 };
 

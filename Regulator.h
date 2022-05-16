@@ -1,15 +1,14 @@
 #pragma once
+
 class Regulator
 {
-private:
-    int P;
-    int I;
-    int D;
-    
-public:
-    Regulator(int P_, int I_, int D_):
-    P(P_),
-    I(I_),
-    D(D_){}
-};
+protected:
 
+	float zadanaTemperatura;
+
+public:
+	Regulator() 
+		: zadanaTemperatura(0) {};
+	void setZadanaTemperatura(float _zadanaTemeratura) { zadanaTemperatura = _zadanaTemeratura;  };
+	virtual float steruj(float aktualnaTemperatura) { return 0.5; };
+};
