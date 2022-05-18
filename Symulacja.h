@@ -9,28 +9,30 @@
 struct Pomiar {
 	float czas;
 	float temperatura;
-	float sterowanie;
 };
-
 
 class Symulacja
 {
 private:
 	Grzejnik grzejnik;
 	Pomieszczenie pomieszczenie;
-	float aktualny_czas;
-	std::vector<Pomiar> rejestr;
 	Regulator* regulator;
 
+	float aktualny_czas;
+	std::vector<Pomiar> rejestr;
+	
 public:
 	
 	Symulacja();
-	void iteracja(float czas);
+	~Symulacja() = default;
+	Symulacja(Symulacja&) = default;
+	void iteracja(float dt);
 	void przebieg(int iteracja, float dt);
+
+	void setRegulator(Regulator* regulator);
+
 	void zapis(std::string nazwa_pliku);
 	void wyswietl();
-	//Grzejnik& getGrzejnik() { return grzejnik; }
-	//Pomieszczenie& getPomieszczenie() { return pomieszczenie; }
-	void setRegulator(Regulator* regulator);
+	
 };
 

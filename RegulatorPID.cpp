@@ -8,13 +8,20 @@ float sterowanie;
 */
 
 RegulatorPID::RegulatorPID()
-	: dt(1),
-	kp(4.0), ki(0.02), kd(0.1),
+	: kp(4.0), ki(0.02), kd(0.1),
 	poprzedniaTemperatura(20), poprzedniUchyb(0), calkaUchybu(0)
 {}
 
 
-float RegulatorPID::steruj(float aktualnaTemperatura){
+void RegulatorPID::steruj(){
+	if (grzejnik == nullptr)
+		throw "Nieprzypisany grzejnik";
+	if (pomieszczenie == nullptr)
+		throw "Nieprzypisane pomieszczenie";
+	if (dt == 0)
+		throw "Dzielenie przez 0";
+
+	float aktualnaTemperatura = pomieszczenie->getTemperatura();
 	float uchyb = zadanaTemperatura - aktualnaTemperatura;
 	float up = kp * uchyb;
 
@@ -26,17 +33,12 @@ float RegulatorPID::steruj(float aktualnaTemperatura){
 
 	poprzedniaTemperatura = aktualnaTemperatura;
 	poprzedniUchyb = uchyb;
-	float steruj = up + ui + ud;
+	float sterowanie = up + ui + ud;
 
-	if (steruj > 1)
-		return 1;
-	else if (steruj < 0)
-		return 0;
+	if (sterowanie > 1)
+		grzejnik->ustaw(1);
+	else if (sterowanie < 0)
+		grzejnik->ustaw(0);
 
-	return steruj;
+	grzejnik->ustaw(sterowanie);
 }
-
-void RegulatorPID::set_dt(float _dt){
-	dt = _dt;
-}
-//void RegulatorPID::setNastawy(float _kp, float _ki, float _kd){}

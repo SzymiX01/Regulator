@@ -7,38 +7,68 @@ Symulacja::Symulacja()
 	regulator(nullptr)
 {}
 
-void Symulacja::iteracja(float czas) {
-	float sterowanie = regulator->steruj(pomieszczenie.getTemperatura());
-	grzejnik.ustaw(sterowanie);
-	rejestr.push_back({ aktualny_czas, pomieszczenie.getTemperatura(), sterowanie });
+void Symulacja::iteracja(float dt) {
+	regulator->steruj();
 	pomieszczenie.dodajCieplo(grzejnik.oddajCieplo());
-	pomieszczenie.aktualizuj(czas);
-	
+	pomieszczenie.aktualizuj(dt);
 }
 
 void Symulacja::przebieg(int iteracje, float dt) {
-	for (int it = 0; it < iteracje; it++) {
-		aktualny_czas += dt;
+	std::cout << "Start petli symulacji" << std::endl;
+	regulator->set_dt(dt); // zakomentowac do wyjatku dzielenia przez 0
+
+	rejestr.push_back({ aktualny_czas, pomieszczenie.getTemperatura() });
+	
+	try {
 		iteracja(dt);
 	}
+	catch(const char* wyjatek){
+		std::cout << wyjatek << std::endl;
+		std::cout << "Przerywam dzialanie petli symulacji" << std::endl;
+		return;
+	}
+
+	aktualny_czas += dt;
+	rejestr.push_back({ aktualny_czas, pomieszczenie.getTemperatura() });
+
+	for (int it = 1; it < iteracje; it++) {
+		iteracja(dt);
+		aktualny_czas += dt;
+		rejestr.push_back({ aktualny_czas, pomieszczenie.getTemperatura() });
+	}
+	std::cout << "Koniec petli symulacji" << std::endl;
 }
 
 void Symulacja::zapis(std::string nazwa_pliku) {
-	std::ofstream plik(nazwa_pliku);
+	std::ofstream plik;
+	try{
+		plik.open(nazwa_pliku);
+		plik << "Czas ; Temperatura" << std::endl;
+	}
+	catch (...) {
+		std::cout << "Nie udalo sie otworzyc pliku " << nazwa_pliku << std::endl;
+		std::cout << "Przerywam zapis do pliku" << std::endl;
+		return;
+	}
+
 	std::locale pol("pl_PL");
 	plik.imbue(pol);
 	for (Pomiar x : rejestr) {
-		plik << x.czas << "; " << x.temperatura << "; " << x.sterowanie << std::endl;
+		plik << x.czas << "; " << x.temperatura << std::endl;
 	}
 	plik.close();
+
+	std::cout << "Zapisano dane do pliku " << nazwa_pliku << std::endl;
 }
 
 void Symulacja::wyswietl() {
 	for (Pomiar x : rejestr){
-		std::cout << x.czas << "; " << x.temperatura << "; " << x.sterowanie << std::endl;
+		std::cout << x.czas << "; " << x.temperatura << "; " << std::endl;
 	}
 }
 
 void Symulacja::setRegulator(Regulator* _regulator) {
 	regulator = _regulator;
+	regulator->setGrzejnik(&grzejnik); // zakomentowac do wyjatku nieprzypisania grzejnika
+	regulator->setPomieszczenie(&pomieszczenie); // j.w. tylko pomieszczenia
 }

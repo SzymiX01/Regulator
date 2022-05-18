@@ -1,16 +1,16 @@
 #include "RegulatorBB.h"
 
 
-void RegulatorBB::setHistereza(float _histereza) {
-	histereza = _histereza;
-}
+void RegulatorBB::steruj() {
+	if (grzejnik == nullptr)
+		throw "Nieprzypisany grzejnik";
+	if (pomieszczenie == nullptr)
+		throw "Nieprzypisane pomieszczenie";
 
-float RegulatorBB::steruj(float aktualnaTemperatura) {
-	if (aktualnaTemperatura > zadanaTemperatura + histereza / 2) {
-		sterowanie = 0;
+	if (pomieszczenie->getTemperatura() > zadanaTemperatura + HISTEREZA / 2) {
+		grzejnik->ustaw(0);
 	}
-	else if (aktualnaTemperatura < zadanaTemperatura - histereza / 2) {
-		sterowanie = 1;
+	else if (pomieszczenie->getTemperatura() < zadanaTemperatura - HISTEREZA / 2) {
+		grzejnik->ustaw(1);
 	}
-	return sterowanie;
 }
